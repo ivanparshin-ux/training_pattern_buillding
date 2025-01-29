@@ -1,0 +1,154 @@
+﻿using System;
+using System.Collections.Generic;
+
+// Интерфейс строителя
+public interface IVehicleBuilder
+{
+    void Initialize();
+    void ConfigureSeats(int count);
+    void ConfigureEngine(string engineType);
+    void AddTripComputer();
+    void AddGPS();
+}
+
+// Строитель для автомобилей
+public class VehicleBuilder : IVehicleBuilder
+{
+    private Vehicle _vehicle = new Vehicle();
+
+    public void Initialize()
+    {
+        _vehicle = new Vehicle();
+    }
+
+    public void ConfigureSeats(int count)
+    {
+        _vehicle.SeatCount = count;
+    }
+
+    public void ConfigureEngine(string engineType)
+    {
+        _vehicle.EngineType = engineType;
+    }
+
+    public void AddTripComputer()
+    {
+        _vehicle.HasTripComputer = true;
+    }
+
+    public void AddGPS()
+    {
+        _vehicle.HasGPS = true;
+    }
+
+    public Vehicle GetVehicle()
+    {
+        return _vehicle;
+    }
+}
+
+// Строитель для руководств
+public class VehicleManualBuilder : IVehicleBuilder
+{
+    private VehicleManual _manual = new VehicleManual();
+
+    public void Initialize()
+    {
+        _manual = new VehicleManual();
+    }
+
+    public void ConfigureSeats(int count)
+    {
+        _manual.AddDetail($"Количество сидений: {count}");
+    }
+
+    public void ConfigureEngine(string engineType)
+    {
+        _manual.AddDetail($"Тип двигателя: {engineType}");
+    }
+
+    public void AddTripComputer()
+    {
+        _manual.AddDetail("Включен бортовой компьютер");
+    }
+
+    public void AddGPS()
+    {
+        _manual.AddDetail("Установлена GPS-навигация");
+    }
+
+    public VehicleManual GetManual()
+    {
+        return _manual;
+    }
+}
+
+// Директор, управляющий процессом сборки
+public class VehicleDirector
+{
+    public void BuildSportCar(IVehicleBuilder builder)
+    {
+        builder.Initialize();
+        builder.ConfigureSeats(1);
+        builder.ConfigureEngine("быстрый");
+        builder.AddTripComputer();
+        builder.AddGPS();
+    }
+
+    public void BuildSUV(IVehicleBuilder builder)
+    {
+        builder.Initialize();
+        builder.ConfigureSeats(1);
+        builder.ConfigureEngine("быстрый");
+        builder.AddGPS();
+    }
+}
+
+// Класс автомобиля
+public class Vehicle
+{
+    public int SeatCount { get; set; }
+    public string EngineType { get; set; }
+    public bool HasTripComputer { get; set; }
+    public bool HasGPS { get; set; }
+}
+
+// Класс для руководства автомобиля
+public class VehicleManual
+{
+    public List<string> Details { get; } = new List<string>();
+
+    public void AddDetail(string detail)
+    {
+        Details.Add(detail);
+    }
+}
+
+// Главный класс клиента
+class Program
+{
+    static void Main(string[] args)
+    {
+        var director = new VehicleDirector();
+
+        // Создание спортивного автомобиля
+        var vehicleBuilder = new VehicleBuilder();
+        director.BuildSportCar(vehicleBuilder);
+        Vehicle sportCar = vehicleBuilder.GetVehicle();
+
+        // Вывод информации о спортивном автомобиле
+        Console.WriteLine("Информация о машине:");
+        Console.WriteLine($"Сидений: {sportCar.SeatCount}");
+        Console.WriteLine($"Двигатель: {sportCar.EngineType}");
+        Console.WriteLine($"Бортовой компьютер: {(sportCar.HasTripComputer ? "Нет" : "")}");
+        Console.WriteLine($"GPS: {(sportCar.HasGPS ? "Да" : "")}");
+
+        // Создание руководства для спортивного автомобиля
+        var manualBuilder = new VehicleManualBuilder();
+        director.BuildSportCar(manualBuilder);
+        VehicleManual sportCarManual = manualBuilder.GetManual();
+        {
+
+        }
+    }
+}
