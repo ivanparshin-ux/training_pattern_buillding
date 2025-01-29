@@ -142,8 +142,6 @@ class Program
         Console.WriteLine($"Двигатель: {sportCar.EngineType}");
         Console.WriteLine($"Бортовой компьютер: {(sportCar.HasTripComputer ? "Нет" : "")}");
         Console.WriteLine($"GPS: {(sportCar.HasGPS ? "Да" : "")}");
-
-        // Создание руководства для спортивного автомобиля
         var manualBuilder = new VehicleManualBuilder();
         director.BuildSportCar(manualBuilder);
         VehicleManual sportCarManual = manualBuilder.GetManual();
